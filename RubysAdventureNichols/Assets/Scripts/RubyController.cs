@@ -5,6 +5,11 @@ using UnityEngine.UIElements;
 
 public class RubyController : MonoBehaviour
 {
+    public float speed = 3.0f;
+
+    public int maxHealth = 5;
+    int currentHealth;
+
     Rigidbody2D rigidbody2d;
     float horizontal;
     float vertical;
@@ -12,6 +17,7 @@ public class RubyController : MonoBehaviour
     void Start()
     {
         rigidbody2d = GetComponent<Rigidbody2D>();
+        currentHealth = maxHealth;
     }
     // Update is called once per frame
     void Update()
@@ -22,19 +28,17 @@ public class RubyController : MonoBehaviour
 
     void FixedUpdate()
     {
-
-        //create 2 variables to use the unity built in axes
-        float horizontal = Input.GetAxis("Horizontal");
-        float vertical = Input.GetAxis("Vertical");
-
-        //Create my movement vector
         Vector2 position = rigidbody2d.position;
-
-        //Create the movement of my character
-        position.x = position.x + 3.0f * horizontal * Time.deltaTime;
-        position.y = position.y + 3.0f * vertical * Time.deltaTime;
-
-        //Set the new position
+        position.x = position.x + speed * horizontal * Time.deltaTime;
+        position.y = position.y + speed * vertical * Time.deltaTime;
+        //create 2 variables to use the unity built in axes
         rigidbody2d.MovePosition(position);
+        //Create my movement vector
+    }
+
+    void ChangeHealth(int amount)
+    {
+        currentHealth = Mathf.Clamp(currentHealth + amount, 0, maxHealth);
+        Debug.Log(currentHealth + "/" + maxHealth);
     }
 }
